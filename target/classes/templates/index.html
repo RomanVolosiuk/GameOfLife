@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--<link th:href="@{/css/style.css}" rel="stylesheet"/>-->
+<head>
+    <meta charset="UTF-8">
+    <title>index page</title>
+</head>
+<body>
+
+<div>
+<h2>This is my Game Of Life implementation</h2>
+<h2>Please, enter Edge Length</h2>
+</div>
+
+<div>
+<form th:method="POST" th:object="${structure}" th:action="@{/}">
+    <label for="length"></label>
+    <input type="text" th:field="*{edgeLength}" id="length"/>
+    <br/>
+    <input type="submit" value="Submit"/>
+</form>
+</div>
+
+</body>
+</html>

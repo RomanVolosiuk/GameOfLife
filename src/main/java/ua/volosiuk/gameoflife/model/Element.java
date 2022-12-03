@@ -1,8 +1,9 @@
-package ua.volosiuk.gameoflife.service;
+package ua.volosiuk.gameoflife.model;
 
 public class Element {
     private int x;
     private int y;
+
 
     public int getX() {
         return x;

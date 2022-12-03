@@ -5,21 +5,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.volosiuk.gameoflife.service.Structure;
+import org.springframework.web.bind.annotation.RequestParam;
+import ua.volosiuk.gameoflife.model.Structure;
 
 @Controller
 public class GameController {
     Structure structure;
 
-    @GetMapping("")
-    public String index(@ModelAttribute("structure") Structure structure) {
+    @GetMapping()
+    public String index(Model model) {
+        model.addAttribute("structure", structure);
         return "index";
     }
 
-    @PostMapping("/")
-    public String setEdgeLength(@ModelAttribute("structure") Structure structure, Model model) {
-        this.structure = structure;
-        model.addAttribute("structure", structure.getEdgeLength());
+    @PostMapping()
+    public String setEdgeLength(@RequestParam ("edgeLength") int edgeLength, Model model) { // requestParam
+        Structure structure = new Structure(edgeLength);
+        model.addAttribute("structure", structure);
         return "redirect:/renderpage";
     }
 

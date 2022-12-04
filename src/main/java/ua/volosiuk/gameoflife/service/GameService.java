@@ -2,6 +2,7 @@ package ua.volosiuk.gameoflife.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import ua.volosiuk.gameoflife.model.FieldValues;
 import ua.volosiuk.gameoflife.model.Structure;
 
 import java.util.ArrayList;
@@ -9,10 +10,9 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-@Component
 public class GameService {
 
-    private Random rand = new Random();
+    private final Random rand = new Random();
     Structure structure = new Structure();
 
     // Генеруємо рандомне поле, перезаписуемо в змінну та викликаемо calculateNextStructure()
@@ -93,5 +93,19 @@ public class GameService {
         field.forEach(System.out::println);
     }
 
+    public FieldValues initField(int length) {
+        FieldValues fieldValues = new FieldValues(length);
+        List<List<Boolean>> values = fieldValues.getValues();
+        for (List<Boolean> row : values) {
+            row.replaceAll(ignored -> rand.nextInt(2) == 0);
+        }
+        return fieldValues;
+    }
+
+    // todo: calculate next step
+    public FieldValues nextStep(FieldValues fieldValues) {
+        return fieldValues;
+
+    }
 }
 

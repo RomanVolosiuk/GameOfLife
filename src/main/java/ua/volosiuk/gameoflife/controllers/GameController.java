@@ -21,12 +21,13 @@ public class GameController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("fieldParams", new FieldParams());
+
         return "index";
     }
 
     @PostMapping()
     public String initField(@ModelAttribute(value="fieldParams") FieldParams fieldParams, Model model) {
-
+        System.out.println("side length = " + fieldParams.getSideLength());
         FieldValues fieldValues = gameService.initField(fieldParams.getSideLength());
         model.addAttribute("fieldValues", fieldValues);
         fieldValues.getValues().forEach(System.out::println);
@@ -34,12 +35,12 @@ public class GameController {
     }
 
     @PostMapping("/step")
-    public String nextStep(@ModelAttribute(value="xfieldValues") FieldValues fieldValues, Model model) {
-        fieldValues.getValues().forEach(System.out::println);
-        System.out.println("Second_fieldValues = " + fieldValues);
+    public String nextStep(@ModelAttribute FieldValues fieldValues, Model model) {
+        System.out.println(fieldValues.toString());
         FieldValues nextFieldValues = gameService.nextStep(fieldValues);
         System.out.println("nextFieldValues = " + nextFieldValues);
         model.addAttribute("fieldValues", nextFieldValues);
+        System.out.println("CONTROLLER /step3");
         return "render";
     }
 }

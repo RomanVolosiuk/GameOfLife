@@ -12,6 +12,7 @@ public class GameService {
     private final Random rand = new Random();
 
     public FieldValues initField(int length) {
+        System.out.println("INIT FIELD");
         FieldValues fieldValues = new FieldValues(length);
         List<List<Boolean>> values = fieldValues.getValues();
         for (List<Boolean> row : values) {
@@ -21,9 +22,9 @@ public class GameService {
     }
 
     // todo: calculate next step
-    public FieldValues nextStep(FieldValues fieldValues) {
-
-        int size = 12;
+    public FieldValues nextStep(FieldValues fieldValues) { // в аргументи приходить null
+        System.out.println("NEXT STEP");
+        int size = 12; // врємяночка
         List<List<Boolean>> calculatedField = new ArrayList<>();
         List<List<Boolean>> previousField = fieldValues.getValues();
 

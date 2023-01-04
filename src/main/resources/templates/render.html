@@ -13,7 +13,7 @@
         <tr th:each="row: ${fieldValues.values}">
             <td th:each="cell: ${row}" th:class="${cell ? 'red' : 'green'}"></td>
     </table>
-    <form action="#" th:method="POST" th:object="${fieldValues}" th:action="@{/step}">
+    <form action="#" th:method="POST" th:object="${fieldValues}" th:action="@{/step(fieldValues)}">
         <input type="submit" value="Submit"/>
     </form>
 </div>

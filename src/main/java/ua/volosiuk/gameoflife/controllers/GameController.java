@@ -36,7 +36,7 @@ public class GameController {
 
     @PostMapping("/step")
     public String nextStep(@ModelAttribute FieldValues fieldValues, Model model) {
-        System.out.println(fieldValues.toString());
+        fieldValues.getValues().forEach(System.out::println);
         FieldValues nextFieldValues = gameService.nextStep(fieldValues);
         System.out.println("nextFieldValues = " + nextFieldValues);
         model.addAttribute("fieldValues", nextFieldValues);

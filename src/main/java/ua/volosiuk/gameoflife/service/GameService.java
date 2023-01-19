@@ -1,6 +1,5 @@
 package ua.volosiuk.gameoflife.service;
 import org.springframework.stereotype.Service;
-import ua.volosiuk.gameoflife.model.FieldValues;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,22 +9,21 @@ import java.util.Random;
 public class GameService {
     private final Random rand = new Random();
 
-    public FieldValues initField(int length) {
-        System.out.println("INIT FIELD");
-        FieldValues fieldValues = new FieldValues(length);
-        List<List<Boolean>> values = fieldValues.getValues();
+    public List<List<Boolean>> initField(int length) {
+        System.out.println("INIT FIELD");;
+        List<List<Boolean>> values = empty(length);
         for (List<Boolean> row : values) {
             row.replaceAll(ignored -> rand.nextInt(2) == 0);
         }
-        return fieldValues;
+        return values;
     }
 
     // todo: calculate next step
-    public FieldValues nextStep(FieldValues fieldValues) { // в аргументи приходить null
+    public List<List<Boolean>> nextStep(List<List<Boolean>> values) { // в аргументи приходить null
         System.out.println("NEXT STEP");
         int size = 12; // врємяночка
-        List<List<Boolean>> calculatedField = new ArrayList<>();
-        List<List<Boolean>> previousField = fieldValues.getValues();
+        List<List<Boolean>> calculatedField = empty(values.size());
+        List<List<Boolean>> previousField = values;
 
         for (int i = 0; i < size; i++) {
             List<Boolean> r = new ArrayList<>();
@@ -68,10 +66,22 @@ public class GameService {
             }
             calculatedField.add(i, r);
         }
-        fieldValues.setValues(calculatedField);
+//        fieldValues.setValues(calculatedField);
 
-        return fieldValues;
+        return values;
 
+    }
+
+    private List<List<Boolean>> empty(int length) {
+        List<List<Boolean>> result = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < length; rowIndex++) {
+            List<Boolean> row = new ArrayList<>(length);
+            for (int cellIndex = 0; cellIndex < length; cellIndex++) {
+                row.add(Boolean.FALSE);
+            }
+            result.add(row);
+        }
+        return result;
     }
 }
 

@@ -10,11 +10,11 @@
 
 <div>
     <table>
-        <tr th:each="row: ${fieldValues.values}">
+        <tr th:each="row: ${values}">
             <td th:each="cell: ${row}" th:class="${cell ? 'red' : 'green'}"></td>
     </table>
-    <form action="#" th:method="POST" th:object="${fieldValues}" th:action="@{/step}">
-        <input type="hidden" th:field="*{values}" th:value=" ${fieldValues.values}">
+    <form action="#" method="POST" th:action="@{/step}">
+        <input type="hidden" name="values" th:value="${values}">
         <input type="submit" value="Submit"/>
     </form>
 </div>

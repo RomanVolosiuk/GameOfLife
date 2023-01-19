@@ -14,9 +14,9 @@
 </div>
 
 <div>
-<form action="#" th:method="POST" th:object="${fieldParams}" th:action="@{/}">
+<form action="#" method="POST" th:action="@{/}">
     <label for="length"></label>
-    <input type="text" th:field="*{sideLength}" id="length"/>
+    <input type="number" name="sideLength" id="length"/>
     <br/>
     <input type="submit" value="Submit"/>
 </form>

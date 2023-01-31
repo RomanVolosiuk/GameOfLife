@@ -4,12 +4,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class GameService {
     private final Random rand = new Random();
+    public static final Logger logger = Logger.getLogger(GameService.class.getName());
 
     public List<List<Boolean>> initListList(int sideLength) {
+        logger.log(Level.INFO, "service / initListList() started" );
         List<List<Boolean>> values = empty(sideLength);
         for (List<Boolean> row : values) {
             row.replaceAll(ignored -> rand.nextInt(2) == 0);
@@ -18,6 +22,7 @@ public class GameService {
     }
 
     public List<List<Boolean>> nextStep(List<List<Boolean>> values) {
+        logger.log(Level.INFO, "service / nextStep() started");
         List<List<Boolean>> calculatedField = empty(values.size());
 
         int size = values.size();
@@ -66,6 +71,7 @@ public class GameService {
     }
 
     private List<List<Boolean>> empty(int length) {
+        logger.log(Level.INFO, "service / empty() started");
         List<List<Boolean>> result = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < length; rowIndex++) {
             List<Boolean> row = new ArrayList<>(length);

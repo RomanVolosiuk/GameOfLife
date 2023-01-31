@@ -17,8 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GameController {
 
-    private static final TypeReference<List<List<Boolean>>> PAYLOAD_TYPE = new TypeReference<>() {
-    };
+    private static final TypeReference<List<List<Boolean>>> PAYLOAD_TYPE = new TypeReference<>() {};
 
     private final GameService gameService;
 
@@ -29,25 +28,18 @@ public class GameController {
 
     @PostMapping()
     public String initField(@RequestParam int sideLength, Model model) {
-        System.out.println("side length = " + sideLength);
-        List<List<Boolean>> values = gameService.initField(sideLength);
+        List<List<Boolean>> values = gameService.initListList(sideLength);
         model.addAttribute("values", values);
-        values.forEach(System.out::println);
         return "render";
     }
 
     @PostMapping("/step")
     public String nextStep(@RequestParam(name = "values") String valuesString, Model model) throws JsonProcessingException {
-        System.out.println(valuesString);
         ObjectMapper mapper = new ObjectMapper();
         List<List<Boolean>> values = mapper.readValue(valuesString, PAYLOAD_TYPE);
-//        values.forEach(System.out::println);
-//        fieldValues.getValues().forEach(System.out::println);
-//        FieldValues nextFieldValues = gameService.nextStep(fieldValues);
-//        System.out.println("nextFieldValues = " + nextFieldValues);
-//        model.addAttribute("fieldValues", nextFieldValues);
+        values = gameService.nextStep(values);
         model.addAttribute("values", values);
-        System.out.println("CONTROLLER /step3");
+
         return "render";
     }
 }

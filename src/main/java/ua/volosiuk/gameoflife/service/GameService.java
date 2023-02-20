@@ -1,41 +1,33 @@
 package ua.volosiuk.gameoflife.service;
-
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import ua.volosiuk.gameoflife.model.Structure;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
-@Component
 public class GameService {
+    private final Random rand = new Random();
+    public static final Logger logger = Logger.getLogger(GameService.class.getName());
 
-    private Random rand = new Random();
-    Structure structure = new Structure();
-
-    // Генеруємо рандомне поле, перезаписуемо в змінну та викликаемо calculateNextStructure()
-    public void toCreateRandomStructure () {
-        int size = structure.getEdgeLength();
-        List<List<Integer>> randomField = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            List<Integer> row = new ArrayList<>();
-            for (int j = 0; j < size; j++) {
-                row.add(j, rand.nextInt(2));
-            }
-            randomField.add(i, row);
+    public List<List<Boolean>> initListList(int sideLength) {
+        logger.log(Level.INFO, "service / initListList() started" );
+        List<List<Boolean>> values = empty(sideLength);
+        for (List<Boolean> row : values) {
+            row.replaceAll(ignored -> rand.nextInt(2) == 0);
         }
-        structure.setNextStructure(randomField);
-        calculateNextStructure(randomField, size);
+        return values;
     }
 
-    public void calculateNextStructure (List<List<Integer>> previousField, int size) {
-        List<List<Integer>> calculatedStructure = new ArrayList<>();
+    public List<List<Boolean>> nextStep(List<List<Boolean>> values) {
+        logger.log(Level.INFO, "service / nextStep() started");
+        List<List<Boolean>> calculatedField = empty(values.size());
 
+        int size = values.size();
         for (int i = 0; i < size; i++) {
-            List<Integer> r = new ArrayList<>();
+            List<Boolean> r = new ArrayList<>(size);
             for (int j = 0; j < size; j++) {
 
                 int neighbours = 0;
@@ -55,43 +47,39 @@ public class GameService {
                             else if (col == size)
                                 col = 0;
 
-                            if (previousField.get(row).get(col) == 1) {
+                            if (values.get(row).get(col)) {
                                 neighbours++;
                             }
                         }
                     }
                 }
+                boolean nextElement;
+                boolean element = values.get(i).get(j);
 
-                int nextElement;
-                int element;
-                element = previousField.get(i).get(j);
-
-                if (element == 1 && neighbours > 1 && neighbours < 4) {
-                    nextElement = 1; // still alive
-                } else if (element == 0 && neighbours == 3) {
-                    nextElement = 1; // to live
+                if (element && neighbours > 1 && neighbours < 4) {
+                    nextElement = true; // still alive
+                } else if (!element && neighbours == 3) {
+                    nextElement = true; // to live
                 } else {
-                    nextElement = 0; // to die
+                    nextElement = false; // to die
                 }
                 r.add(j, nextElement);
             }
-            calculatedStructure.add(i, r);
+            calculatedField.set(i, r);
         }
-        structure.setNextStructure(calculatedStructure);
-        outToConsole(calculatedStructure);
+        return calculatedField;
     }
 
-    public void doNextStep () {
-        calculateNextStructure(structure.getNextStructure(), structure.getEdgeLength());
-    }
-
-    public void outToConsole (List<List<Integer>> field) {
-
-        for (int i = 0; i < structure.getEdgeLength() * 3; i++) {
-            System.out.print("-");
+    private List<List<Boolean>> empty(int length) {
+        logger.log(Level.INFO, "service / empty() started");
+        List<List<Boolean>> result = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < length; rowIndex++) {
+            List<Boolean> row = new ArrayList<>(length);
+            for (int cellIndex = 0; cellIndex < length; cellIndex++) {
+                row.add(Boolean.FALSE);
+            }
+            result.add(row);
         }
-        field.forEach(System.out::println);
+        return result;
     }
-
 }
-

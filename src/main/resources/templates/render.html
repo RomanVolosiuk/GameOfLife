@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>render page</title>
+    <style></style>
+    <link th:href="@{/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div>
+    <table>
+        <tr th:each="row: ${values}">
+            <td th:each="cell: ${row}" th:class="${cell ? 'red' : 'green'}"></td>
+    </table>
+    <form action="#" method="POST" th:action="@{/step}">
+        <input type="hidden" name="values" th:value="${values}">
+        <input type="submit" value="Submit"/>
+    </form>
+</div>
+
+</body>
+</html>

@@ -29,7 +29,6 @@ public class GameController {
     @PostMapping()
     public String initField(@RequestParam int sideLength, Model model) {
         logger.log(Level.INFO, "controller / initField() started");
-        logger.log(Level.INFO, "side length = " + sideLength);
         List<List<Boolean>> values = gameService.initListList(sideLength);
         model.addAttribute("values", values);
         return "render";

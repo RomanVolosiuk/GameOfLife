@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<!--<link th:href="@{/css/style.css}" rel="stylesheet"/>-->
 <head>
     <meta charset="UTF-8">
     <title>index page</title>
@@ -9,17 +8,16 @@
 <body>
 
 <div>
-<h2>This is my Game Of Life implementation</h2>
-<h2>Please, enter Edge Length</h2>
+    <h2>This is the "Game of Life" implementation.</h2>
+    <h2>Please, enter Edge Length number (from 5 to 32)</h2>
 </div>
 
-<div>
-<form action="#" method="POST" th:action="@{/}">
-    <label for="length"></label>
-    <input type="number" name="sideLength" id="length"/>
-    <br/>
-    <input type="submit" value="Submit"/>
-</form>
+<div style="display: flex; align-items: center;">
+    <form action="#" method="POST" th:action="@{/}" style="flex: 1;">
+        <label for="length"></label>
+        <input type="number" name="sideLength" id="length"/>
+        <input type="submit" value="Submit"/>
+    </form>
 </div>
 
 </body>

@@ -1,4 +1,5 @@
 package ua.volosiuk.gameoflife.service;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,74 +13,71 @@ public class GameService {
     private final Random rand = new Random();
     public static final Logger logger = Logger.getLogger(GameService.class.getName());
 
+    // Initialize a random grid of the specified side length
     public List<List<Boolean>> initListList(int sideLength) {
-        logger.log(Level.INFO, "service / initListList() started" );
-        List<List<Boolean>> values = empty(sideLength);
-        for (List<Boolean> row : values) {
-            row.replaceAll(ignored -> rand.nextInt(2) == 0);
-        }
-        return values;
+        logger.log(Level.INFO, "service / initListList() started");
+
+        return initializeRandomGrid(sideLength);
     }
 
+    // Calculate the next step
     public List<List<Boolean>> nextStep(List<List<Boolean>> values) {
         logger.log(Level.INFO, "service / nextStep() started");
-        List<List<Boolean>> calculatedField = empty(values.size());
-
         int size = values.size();
+        List<List<Boolean>> calculatedField = new ArrayList<>(size);
+
         for (int i = 0; i < size; i++) {
-            List<Boolean> r = new ArrayList<>(size);
+            List<Boolean> newRow = new ArrayList<>(size);
             for (int j = 0; j < size; j++) {
-
-                int neighbours = 0;
-                for (int x = -1; x <= 1; x += 1) {
-                    for (int y = -1; y <= 1; y += 1) {
-                        if (!(y == 0 && x == 0)) {
-                            int row = i + y;
-                            int col = j + x;
-
-                            if (row < 0)
-                                row = size - 1;
-                            else if (row == size)
-                                row = 0;
-
-                            if (col < 0)
-                                col = size - 1;
-                            else if (col == size)
-                                col = 0;
-
-                            if (values.get(row).get(col)) {
-                                neighbours++;
-                            }
-                        }
-                    }
-                }
-                boolean nextElement;
-                boolean element = values.get(i).get(j);
-
-                if (element && neighbours > 1 && neighbours < 4) {
-                    nextElement = true; // still alive
-                } else if (!element && neighbours == 3) {
-                    nextElement = true; // to live
-                } else {
-                    nextElement = false; // to die
-                }
-                r.add(j, nextElement);
+                int neighbors = countNeighbors(values, i, j);
+                boolean nextElement = determineNextElement(values.get(i).get(j), neighbors);
+                newRow.add(nextElement);
             }
-            calculatedField.set(i, r);
+            calculatedField.add(newRow);
         }
+
         return calculatedField;
     }
 
-    private List<List<Boolean>> empty(int length) {
-        logger.log(Level.INFO, "service / empty() started");
+    // Count the number of neighbors around a given cell
+    private int countNeighbors(List<List<Boolean>> values, int row, int col) {
+        int size = values.size();
+        int neighbors = 0;
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                if (x == 0 && y == 0) continue;
+                int newRow = (row + y + size) % size;
+                int newCol = (col + x + size) % size;
+                if (Boolean.TRUE.equals(values.get(newRow).get(newCol))) {
+                    neighbors++;
+                }
+            }
+        }
+
+        return neighbors;
+    }
+
+    // Determine the next state of a cell
+    private boolean determineNextElement(boolean currentElement, int neighbors) {
+        if (currentElement) {
+            return neighbors > 1 && neighbors < 4;
+        } else {
+            return neighbors == 3;
+        }
+    }
+
+    // Initialize a grid with all cells set to random boolean values
+    private List<List<Boolean>> initializeRandomGrid(int length) {
+        logger.log(Level.INFO, "service / initializeRandomGrid() started");
         List<List<Boolean>> result = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < length; rowIndex++) {
             List<Boolean> row = new ArrayList<>(length);
             for (int cellIndex = 0; cellIndex < length; cellIndex++) {
-                row.add(Boolean.FALSE);
+                row.add(rand.nextInt(2) == 0);
             }
             result.add(row);
         }
+
         return result;
     }
 }
